@@ -3,9 +3,6 @@ package org.example.dao;
 import org.example.model.User;
 import org.example.util.Util;
 import org.hibernate.Session;
-
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -19,6 +16,9 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = Util.getConHibernate().openSession()) {
             session.beginTransaction();
             session.createSQLQuery("CREATE TABLE IF NOT EXISTS user(id MEDIUMINT NOT NULL AUTO_INCREMENT, name VARCHAR(30) NOT NULL,lastName VARCHAR(30) NOT NULL, age INTEGER, PRIMARY KEY (id))").addEntity(User.class).executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error создание таблицы прошло неудачно");
+            throw e;
         }
     }
 
@@ -27,6 +27,9 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = Util.getConHibernate().openSession()) {
             session.beginTransaction();
             session.createSQLQuery("DROP TABLE IF EXISTS user").addEntity(User.class).executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error удаление таблицы прошло неудачно");
+            throw e;
         }
     }
 
